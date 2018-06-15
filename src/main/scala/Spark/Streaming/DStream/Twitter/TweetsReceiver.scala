@@ -24,12 +24,11 @@ class TweetsReceiver(appName: String, keyWordsList: List[String], language: Stri
   private def streamTweets() {
 
     /*val configurationBuilder = new twitter4j.conf.ConfigurationBuilder()
-
     configurationBuilder.setDebugEnabled(true)
-      .setOAuthConsumerKey(Twitter4jConfiguration.CONSUMER_KEY)
-      .setOAuthConsumerSecret(Twitter4jConfiguration.CONSUMER_SECRET)
-      .setOAuthAccessToken(Twitter4jConfiguration.ACCESS_TOKEN)
-      .setOAuthAccessTokenSecret(Twitter4jConfiguration.ACCESS_TOKEN_SECRET)*/
+    .setOAuthConsumerKey(Twitter4jConfiguration.CONSUMER_KEY)
+    .setOAuthConsumerSecret(Twitter4jConfiguration.CONSUMER_SECRET)
+    .setOAuthAccessToken(Twitter4jConfiguration.ACCESS_TOKEN)
+    .setOAuthAccessTokenSecret(Twitter4jConfiguration.ACCESS_TOKEN_SECRET)*/
 
     val tweetsStream = new TwitterStreamFactory().getInstance()
 

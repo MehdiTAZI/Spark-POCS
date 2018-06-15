@@ -1,0 +1,8 @@
+Important points :
+
+When executing on cluster mode, stor files on distributed system and do not print using foreach rdd
+
+Application workflow :
+
+1 - Spark.Streaming.DStream.Twitter --> download tweets in "outputs/tweets"
+2 - Spark.Batch.RDD --> consolidate files & filter tweets
