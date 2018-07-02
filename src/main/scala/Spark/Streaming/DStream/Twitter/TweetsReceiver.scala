@@ -23,6 +23,7 @@ class TweetsReceiver(appName: String, keyWordsList: List[String], language: Stri
 
   private def streamTweets() {
 
+    //TODO : comments should be removed, git keeps track
     /*val configurationBuilder = new twitter4j.conf.ConfigurationBuilder()
     configurationBuilder.setDebugEnabled(true)
     .setOAuthConsumerKey(Twitter4jConfiguration.CONSUMER_KEY)

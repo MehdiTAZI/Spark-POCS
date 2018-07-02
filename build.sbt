@@ -8,7 +8,7 @@ scalaVersion := "2.11.8"
 val scalaTestVersion = "3.0.5"
 val sparkVersion = "2.3.0"
 val twitter4jVersion ="4.0.4"
-val mockitoVersion = "1.8.5"
+//val mockitoVersion = "1.8.5"
 
 resolvers ++= Seq(
   "apache-snapshots" at "http://repository.apache.org/snapshots/"
@@ -28,4 +28,4 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "org.scalactic" %% "scalactic" % scalaTestVersion
 libraryDependencies += "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
-libraryDependencies += "org.mockito" % "mockito-core" % mockitoVersion  % Test
+//libraryDependencies += "org.mockito" % "mockito-core" % mockitoVersion  % Test

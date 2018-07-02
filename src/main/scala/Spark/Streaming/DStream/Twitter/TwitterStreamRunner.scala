@@ -1,11 +1,11 @@
 package Spark.Streaming.DStream.Twitter
 
-import Spark.Utils.StringProcessing
 import org.apache.spark.SparkConf
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.{Seconds, StreamingContext, Time}
-import twitter4j.Status;
 import java.nio.file.Files
+
+import Spark.Utils.Matchers
 
 object TwitterStreamRunner {
 
@@ -15,31 +15,6 @@ object TwitterStreamRunner {
     return new StringBuilder(output_path).append(time.milliseconds.toString).append("/").append(nature).toString()
   }
 
-  private def filterOnKeywords(twitterStatus: Status, keyWordsList: List[String]): Boolean = {
-    keyWordsList.exists(
-      x => twitterStatus.getText.toLowerCase().contains(x) ||
-        twitterStatus.getText.toLowerCase().startsWith(StringProcessing.ltrim(x)) ||
-        twitterStatus.getText.toLowerCase().endsWith(StringProcessing.rtrim(x))
-    )
-  }
-
-  private def detailedMapping(twitterStatus: Status, keyWordsList: List[String]): String = {
-    String.format("%s|%s|%s|%s|%s|%s",
-      twitterStatus.getId.toString,
-      new StringBuilder("@").append(twitterStatus.getUser.getScreenName).toString(),
-      twitterStatus.getText,
-      twitterStatus.getCreatedAt.toString,
-      twitterStatus.getRetweetCount.toString,
-      keyWordsList.filter(x => twitterStatus.getText.toLowerCase().contains(x) || twitterStatus.getText.toLowerCase().startsWith(StringProcessing.ltrim(x)) || twitterStatus.getText.toLowerCase().endsWith(StringProcessing.rtrim(x)))
-    )
-  }
-
-  private def abstractMapping(twitterStatus: Status): String = {
-    String.format("%s|%s",
-      new StringBuilder("@").append(twitterStatus.getUser.getScreenName).toString(),
-      twitterStatus.getText
-    )
-  }
 
   // todo : to fix
   def stop(appName: String): Unit = {
@@ -51,14 +26,14 @@ object TwitterStreamRunner {
     }
   }
 
-  def run(appName: String, keyWordsList: List[String], frequency: Int, tweetsOutputDirectory: String = "outputs/tweets") {
+  def run(appName: String, keyWordsList: List[String], frequency: Int, tweetsOutputDirectory: String = "outputs/tweets", masterConf : String = "local[2]") {
 
     val output_path = new StringBuilder(tweetsOutputDirectory).append("/").toString()
 
     if (!appsList.contains(appName)) {
 
       // setting master to local[2] in order to identify any problems that may only arise on distribute work.
-      val config = new SparkConf().setAppName(appName).setMaster("local[2]")
+      val config = new SparkConf().setAppName(appName).setMaster(masterConf)
       var sparkStreamingContext = new StreamingContext(config, Seconds(frequency))
 
       val checkpointDir = Files.createTempDirectory(new StringBuilder(appName).append("_checkpoint").toString()).toString
@@ -68,14 +43,14 @@ object TwitterStreamRunner {
 
       val tweetsDStream = sparkStreamingContext
         .receiverStream(new TweetsReceiver(appName, keyWordsList))
-        .filter(s => filterOnKeywords(s, keyWordsList))
+        .filter(s => Matchers.filterOnKeywords(s, keyWordsList))
 
       // caching on memory otherwise on disk, used for detailed & abstract mapping
       tweetsDStream.persist(StorageLevel.MEMORY_AND_DISK)
 
-      val tweetsDStreamDetailedMapping = tweetsDStream.map(s => detailedMapping(s, hashTagListLowered))
+      val tweetsDStreamDetailedMapping = tweetsDStream.map(s => Matchers.detailedMapping(s, hashTagListLowered))
 
-      val tweetsDStreamAbstractMapping = tweetsDStream.map(s => abstractMapping(s))
+      val tweetsDStreamAbstractMapping = tweetsDStream.map(s => Matchers.abstractMapping(s))
 
       // avoid empty rdds, no need to do same manually for partitions, as this part will be done througth a cleaning & ingesting job
       tweetsDStreamDetailedMapping.foreachRDD(

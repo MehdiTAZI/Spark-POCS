@@ -1,7 +1,7 @@
 package Spark.Streaming.DStream.Twitter.TwitterStreamRunnerSpec
 
 import Spark.Streaming.DStream.Twitter.TwitterStreamRunner
-import org.mockito.Mockito._
+//import org.mockito.Mockito._
 import org.scalatest._
 import twitter4j.Status
 

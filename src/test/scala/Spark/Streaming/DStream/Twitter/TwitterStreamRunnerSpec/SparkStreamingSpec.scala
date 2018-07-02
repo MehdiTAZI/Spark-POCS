@@ -2,13 +2,11 @@ package Spark.Streaming.DStream.Twitter.TwitterStreamRunnerSpec
 
 import java.nio.file.Files
 
-import Spark.Streaming.DStream.Twitter.TweetsReceiver
-import Spark.Streaming.DStream.Twitter.TwitterStreamRunner.filterOnKeywords
+
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.dstream.ReceiverInputDStream
 import org.apache.spark.streaming.{Seconds, StreamingContext, Time}
 import org.scalatest._
-import org.mockito.Mockito.mock
+//import org.mockito.Mockito.mock
 import twitter4j.Status
 
 class SparkStreamingSpec extends FunSuite with BeforeAndAfterEach{
@@ -32,7 +30,8 @@ class SparkStreamingSpec extends FunSuite with BeforeAndAfterEach{
 
   test("mapping tweets "){
 
-    val mockedStreamingContext : StreamingContext = mock(classOf[StreamingContext])
+    //TODO : comments should be removed, git keeps track
+    //val mockedStreamingContext : StreamingContext = mock(classOf[StreamingContext])
 
     //when(mockedStreamingContext.stream("localhost", 9999))
 

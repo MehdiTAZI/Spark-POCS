@@ -1,7 +1,7 @@
 package Spark.Utils
 
 import org.scalatest._
-import org.mockito.Mockito._
+//import org.mockito.Mockito._
 
 class StringProcessingSpec extends FlatSpec {
 
